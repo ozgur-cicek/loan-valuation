@@ -11,8 +11,8 @@
 	</parent>
 
 	<artifactId>requestloans</artifactId>
-	<name>Request Loans</name>
-	<description>Spring Cloud Task to request loans</description>
+	<name>Request Loans Task</name>
+	<description>Spring Cloud Task to request loans from Loan Provider service</description>
 
 	<dependencies>
 		<dependency>

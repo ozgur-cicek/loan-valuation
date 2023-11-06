@@ -51,7 +51,9 @@ This provides a Rest API to accept loan information and return the calculated th
 ## Architectural Patterns & Design Decisions
 `Single service per host` pattern is used because we run the microservices on their own host with their own resources. 
 This makes them run and scale independently.
+
 Because multiple microservices use a shared database, it uses `Shared DB server` pattern.
+
 With the usage of a messaging middleware, `Queue-Centric Workflow` pattern applied to distribute the valuation flow 
 between services to make it scalable and so on faster.
 
