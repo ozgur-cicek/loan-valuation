@@ -10,9 +10,9 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>requestloans</artifactId>
-	<name>Request Loans Task</name>
-	<description>Spring Cloud Task to request loans from Loan Provider service</description>
+	<artifactId>loanvaluationprocessor</artifactId>
+	<name>Loan Valuation Processor Service</name>
+	<description>Long-lived service to consume loan detail queue messages and call valuation service to get fair value calculated</description>
 
 	<dependencies>
 		<dependency>

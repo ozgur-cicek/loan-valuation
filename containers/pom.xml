@@ -29,6 +29,7 @@
 		<module>loan-valuation/setup</module>
 		<module>loan-valuation/requestloans</module>
 		<module>loan-valuation/valuateloans</module>
+		<module>loan-valuation/loanvaluationprocessor</module>
 		<module>external-services/loanprovider</module>
 		<module>external-services/valuationservice</module>
 	</modules>

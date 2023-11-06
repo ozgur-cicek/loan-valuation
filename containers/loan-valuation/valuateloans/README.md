@@ -1,4 +1,6 @@
-## Valuate Loans
+## Valuate Loans Task
 
-Source code for the short-lived app which will consume queue messages and call valuation service for loan fair value 
-calculation (which is not implemented yet).
+Source code for the short-lived task which reads loan details from database and put them as queue messages to be processed 
+by loan-valuation-processor 
+
+**Not implemented yet.**
