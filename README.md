@@ -88,4 +88,6 @@ To get the public IP of Data Flow application to which Operator access by web-br
 minikube service --url scdf-server
 ```
 
-Now, we can use it on a browser like http://127.0.0.1:55445/dashboard
+Now, we can use it on a browser like http://127.0.0.1:60911/dashboard
+
+![Sample UI that shows the added loan valuation applications](./images/data_flow_ui.png "Data Flow UI")
