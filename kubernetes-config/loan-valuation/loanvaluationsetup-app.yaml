@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: loanvaluationsetup
+spec:
+  restartPolicy: Never
+  containers:
+    - name: loan-valuation-setup
+      image: ozgoru/loanvaluation-setup:3.0.0
+      env:
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mariadb
+              key: database-password
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mariadb://mariadb:3306/task
+        - name: SPRING_DATASOURCE_USERNAME
+          value: root
+        - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+          value: org.mariadb.jdbc.Driver
+        - name: spring.cloud.dataflow.client.server-uri
+          value: 'http://${SCDF_SERVER_SERVICE_HOST}:${SCDF_SERVER_SERVICE_PORT}'
+  initContainers:
+    - name: init-mariadb-database
+      image: mariadb:10.4.22
+      env:
+        - name: MARIADB_PWD
+          valueFrom:
+            secretKeyRef:
+              name: mariadb
+              key: database-password
+      command:
+        [
+          'sh',
+          '-c',
+          'mariadb -h mariadb -u root --password=$MARIADB_PWD -e "CREATE DATABASE IF NOT EXISTS task;"',
+        ]

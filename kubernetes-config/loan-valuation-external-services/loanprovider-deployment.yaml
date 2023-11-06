@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loan-provider
+  labels:
+    app: loan-provider
+spec:
+  selector:
+    matchLabels:
+      app: loan-provider
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: loan-provider
+    spec:
+      containers:
+        - name: loan-provider
+          image: ozgoru/loanvaluation-loanprovider:3.0.0
+          imagePullPolicy: IfNotPresent
+#          volumeMounts:
+#            - name: config
+#              mountPath: /workspace/config
+#              readOnly: true
+#            - name: database
+#              mountPath: /etc/secrets/database
+#              readOnly: true
+          ports:
+            - containerPort: 9090
+#          livenessProbe:
+#            httpGet:
+#              path: /management/health
+#              port: 9090
+#            initialDelaySeconds: 45
+#          readinessProbe:
+#            httpGet:
+#              path: /management/info
+#              port: 9090
+#            initialDelaySeconds: 45
+#          startupProbe:
+#            tcpSocket:
+#              port: 9090
+#            initialDelaySeconds: 15
+#            periodSeconds: 3
+#            failureThreshold: 120
+#            timeoutSeconds: 3
+          resources:
+            requests:
+              cpu: 1.0
+              memory: 1048Mi
+          env:
+            - name: LANG
+              value: 'en_US.utf8'
+            - name: LC_ALL
+              value: 'en_US.utf8'
+            - name: JDK_JAVA_OPTIONS
+              value: '-Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8'
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: "metadata.namespace"
+            - name: SERVER_PORT
+              value: '9090'
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb
+                  key: database-password
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mariadb://mariadb:3306/task
+            - name: SPRING_DATASOURCE_USERNAME
+              value: root
+            - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+              value: org.mariadb.jdbc.Driver
+            - name: spring.cloud.dataflow.client.server-uri
+              value: 'http://${SCDF_SERVER_SERVICE_HOST}:${SCDF_SERVER_SERVICE_PORT}'
+      initContainers:
+        - name: init-mariadb-wait
+          image: busybox:1
+          imagePullPolicy: IfNotPresent
+          command: ['sh', '-c', 'until nc -w3 -z mariadb 3306; do echo waiting for mariadb; sleep 3; done;']
+      serviceAccountName: scdf-sa
+      volumes:
+        - name: config
+          configMap:
+            name: loan-provider
+            items:
+              - key: application.yaml
+                path: application.yaml
+        - name: database
+          secret:
+            secretName: mariadb
