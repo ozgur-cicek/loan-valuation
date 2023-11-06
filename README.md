@@ -49,9 +49,11 @@ external **valuation service**. Finally, write the calculated loan fair value to
 This provides a Rest API to accept loan information and return the calculated the fair price to the client.
 
 ## Architectural Patterns & Design Decisions
-`Single service per host` pattern is used because we run the microservices on their own host with their own resources.
+`Single service per host` pattern is used because we run the microservices on their own host with their own resources. 
+This makes them run and scale independently.
 Because multiple microservices use a shared database, it uses `Shared DB server` pattern.
-`Queue-Centric Workflow` pattern is used with the usage of a queue to distribute the work between services to make it scalable.
+With the usage of a messaging middleware, `Queue-Centric Workflow` pattern applied to distribute the valuation flow 
+between services to make it scalable and so on faster.
 
 Managing just one database instance makes it convenient to manage and work, but it also generates security concerns. One 
 service can access and change to the other service's data so having specific database user and roles by the services 
